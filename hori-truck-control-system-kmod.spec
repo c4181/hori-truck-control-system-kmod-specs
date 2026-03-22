@@ -6,7 +6,7 @@
 Name: hori-truck-control-system-kmod
 
 Version:        0.0.2
-Release:        2%{?dist}.1
+Release:        %autorelease
 Summary:        Driver for the Hori Truck Control System
 
 Group:          System Environment/Kernel
@@ -53,8 +53,9 @@ done
 rm -rf ${RPM_BUILD_ROOT}
 
 for kernel_version in %{?kernel_versions}; do
-    make install DESTDIR=${RPM_BUILD_ROOT} KMODPATH=%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}
-    # install -D -m 755 _kmod_build_${kernel_version%%___*}/foo/foo.ko  ${RPM_BUILD_ROOT}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/foo.ko
+    install -d %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/
+    install -m 755 _kmod_build_${kernel_version%%___*}/hid-hori-wheels.ko %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/
+    install -m 755 _kmod_build_${kernel_version%%___*}/hid-hori-multisticks.ko %{buildroot}%{kmodinstdir_prefix}/${kernel_version%%___*}/%{kmodinstdir_postfix}/
 done
 %{?akmod_install}
 
